@@ -1,0 +1,399 @@
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local Lighting = game:GetService("Lighting")
+local VirtualUser = game:GetService("VirtualUser")
+local RunService = game:GetService("RunService")
+local PathfindingService = game:GetService("PathfindingService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ProximityPromptService = game:GetService("ProximityPromptService")
+local UserInputService = game:GetService("UserInputService")
+local Workspace = game:GetService("Workspace")
+local SoundService = game:GetService("SoundService")
+local Debris = game:GetService("Debris")
+
+if game.ReplicatedStorage:FindFirstChild("Bricks") then
+RemotesFolder = ReplicatedStorage.Bricks
+else
+RemotesFolder = ReplicatedStorage.RemotesFolder
+end
+
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"))()
+
+Library:SetTheme("Dark")
+
+
+local function gradient(text, startColor, endColor)
+    local result = ""
+    for i = 1, #text do
+        local t = (i - 1) / (#text - 1)
+        local r = math.floor((startColor.R + (endColor.R - startColor.R) * t) * 255)
+        local g = math.floor((startColor.G + (endColor.G - startColor.G) * t) * 255)
+        local b = math.floor((startColor.B + (endColor.B - startColor.B) * t) * 255)
+        result = result .. string.format('<font color="rgb(%d,%d,%d)">%s</font>', r, g, b, text:sub(i, i))
+    end
+    return result
+end
+
+local Window = Library:CreateWindow({
+    Title = "YOUHUB",
+    Icon = "geist:key",
+    Author = "v0.1",
+    Folder = "WindUI_Example",
+    Size = UDim2.fromOffset(800, 600),
+    Theme = "Dark",
+    User = {
+        Enabled = true,
+        Anonymous = false,
+        Callback = function()
+            Library:Notify({
+                Title = "User Profile",
+                Content = "User profile clicked!",
+                Duration = 3
+            })
+        end
+    },
+    Acrylic = true,
+    HideSearchBar = false,
+    SideBarWidth = 200
+})
+Window:Tag({
+    Title = "BETA",
+    Color = Library:Gradient({
+        ["0"]   = { Color = Color3.fromRGB(0,100,255), Transparency = 0 },
+        ["100"] = { Color = Color3.fromRGB(0,200,255), Transparency = 0 },
+    }, {
+        Rotation = 45,
+    }),
+})
+Window:Tag({
+    Title = "DOORS",
+    Color = Library:Gradient({
+        ["0"]   = { Color = Color3.fromRGB(0,255,100), Transparency = 0 },
+        ["100"] = { Color = Color3.fromRGB(0,255,200), Transparency = 0 },
+    }, {
+        Rotation = 45,
+    }),
+})
+local Tabs = {
+    Main = Window:Section({ Title = "CÁC MỤC", Opened = true }),
+}
+
+local Tabs = {
+    Main = Tabs.Main:Tab({ Title = "Chính", Icon = "layout-grid"}),
+    Exploit = Tabs.Main:Tab({ Title = "Thực Thể", Icon = "book-open"}),
+    Players = Tabs.Main:Tab({ Title = "Người Chơi", Icon = "user" }),
+    Visual = Tabs.Main:Tab({ Title = "Thị Giác", Icon = "eye" }),
+    ESP = Tabs.Main:Tab({ Title = "Định Vị", Icon = "map"}),
+    Fun = Tabs.Main:Tab({ Title = "Vui Đùa", Icon = "laugh"}),
+    Items = Tabs.Main:Tab({ Title = "Vật Phẩm", Icon = "hammer"}),
+    Camera = Tabs.Main:Tab({ Title = "Màn Hình", Icon = "camera"}),
+    Miscellaneous = Tabs.Main:Tab({ Title = "Lặt Vặt", Icon = "plus"}),
+    Event = Tabs.Main:Tab({ Title = "Sự Kiện", Icon = "compass"}),
+    Setting = Tabs.Main:Tab({ Title = "Cài Đặt", Icon = "settings"}),
+}
+
+Tabs.Main:Section({Title = "Thông Báo", Icon = "layout-grid"})
+
+local function Notify(name, time)
+Library:Notify({
+Title = "Thông Báo",
+Content = name,
+Icon = "bell",
+Duration = time or 5
+})
+local Sound = Instance.new("Sound")
+Sound.Parent = game.SoundService
+Sound.SoundId = "rbxassetid://4590657391"
+Sound.Volume = _G.PlaySound and 10 or 0
+Sound.PlayOnRemove = true
+Sound:Destroy()
+end
+
+Tabs.Main:Toggle({
+    Title = "Thông Báo Thực Thể",
+    Value = false,
+    Callback = function(v) 
+if v then
+EntityTable = {'RushMoving', 'AmbushMoving', 'BackdoorRush', 'A60', 'A120', 'MonumentEntity', 'BackdoorLookman', 'Eyes', 'Groundskeeper', 'SeekMoving', 'SeekMovingNewClone', 'JeffTheKiller', 'GlitchRush', 'GlitchAmbush', 'GloombatSwarm', 'SallyWindow'}
+EntityNotify = workspace.DescendantAdded:Connect(function(v)
+if table.find(EntityTable,v.Name) then
+repeat task.wait() until game.Players.LocalPlayer:DistanceFromCharacter(v:GetPivot().Position) < 750 or not v:IsDescendantOf(workspace)
+if v:IsDescendantOf(workspace) then
+if v.Name == "RushMoving" then
+Notify("Rush!")
+if _G.PlayChat then
+game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("Rush!")
+end
+elseif v.Name == "AmbushMoving" then
+Notify("Ambush!")
+if _G.PlayChat then
+game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("Ambush!")
+end
+elseif v.Name == "BackdoorRush" then
+Notify("Blitz!")
+if _G.PlayChat then
+game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("Blitz!")
+end
+elseif v.Name == "A60" then
+Notify("A60!")
+if _G.PlayChat then
+game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("A60!")
+end
+elseif v.Name == "A120" then
+Notify("A120!")
+if _G.PlayChat then
+game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("A120!")
+end
+elseif v.Name == "MonumentEntity" then
+Notify("Monument!")
+if _G.PlayChat then
+game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("Monument!")
+end
+elseif v.Name == "BackdoorLookman" then
+Notify("Lookman!")
+if _G.PlayChat then
+game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("Lookman!")
+end
+elseif v:IsA("Model") and v.Name == "Eyes" then
+Notify("Eyes!")
+if _G.PlayChat then
+game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("Eyes!")
+end
+elseif v.Name == "Groudskeeper" then
+Notify("Groundskeeper!")
+if _G.PlayChat then
+game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("Groudskeeper!")
+end
+elseif v.Name == "SeekMoving" or v.Name == "SeekMovingNewClone" then
+Notify("Seek, goodluck!")
+if _G.PlayChat then
+game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("Seek, goodluck!")
+end
+elseif v.Name == "JeffTheKiller" then
+Notify("Jeff!")
+if _G.PlayChat then
+game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("Jeff!")
+end
+elseif v.Name == "GlitchRush" then
+Notify("Glitch Rush!")
+elseif v.Name == "GlitchAmbush" then
+Notify("Glitch Ambush!")
+elseif v.Name == "GloombatSwarm" then
+Notify("Gloombat Swarm!")
+if _G.PlayChat then
+game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("Gloombat Swarm!")
+end
+elseif v.Name == "SallyWindow" then
+Notify("Sally!")
+if _G.PlayChat then
+game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("Sally!")
+end
+end
+end
+end
+end)
+else
+EntityNotify:Disconnect()
+end
+end})
+Tabs.Main:Toggle({
+    Title = "Thông Báo Trên Tin Nhắn",
+    Value = false,
+    Callback = function(v) 
+_G.PlayChat = v
+end})
+Tabs.Main:Toggle({
+    Title = "Thông Báo Âm Thanh",
+    Value = false,
+    Callback = function(v) 
+_G.PlaySound = v
+end})
+Tabs.Main:Toggle({
+    Title = "Thông Báo Không Khí",
+    Value = false,
+    Callback = function(v) 
+if v then
+OxygenNotify = game.Players.LocalPlayer.Character:GetAttributeChangedSignal("Oxygen"):Connect(function()
+if game.Players.LocalPlayer.Character:GetAttribute("Oxygen") < 100 then
+firesignal(RemotesFolder.Caption.OnClientEvent, string.format("Không Khí Còn Lại: %.1f", game.Players.LocalPlayer.Character:GetAttribute("Oxygen")))
+end
+end)
+else
+OxygenNotify:Disconnect()
+end
+end})
+Tabs.Main:Section({Title = "Các Cửa", Icon = "layout-grid"})
+game:GetService("RunService").RenderStepped:Connect(function()
+if _G.ReachDoors then
+game.workspace.CurrentRooms[tostring(game:GetService("ReplicatedStorage").GameData.LatestRoom.Value)]:WaitForChild("Door").ClientOpen:FireServer()
+end
+if _G.FastDoors then 
+game.workspace.CurrentRooms[tostring(game:GetService("ReplicatedStorage").GameData.LatestRoom.Value)]:WaitForChild("Door"):SetAttribute("FastOpen", true)
+end
+end)
+Tabs.Main:Toggle({
+    Title = "Mở Cửa Xa",
+    Value = false,
+    Callback = function(v) 
+_G.ReachDoors = v
+end})
+Tabs.Main:Toggle({
+    Title = "Mở Cửa Nhanh",
+    Value = false,
+    Callback = function(v) 
+_G.FastDoors = v
+end})
+Tabs.Main:Section({Title = "Các Tương Tác", Icon = "layout-grid"})
+workspace.CurrentRooms.DescendantAdded:Connect(function(v)
+if not _G.InstanceInteract then return end
+if not _G.ReachInteract then return end
+if not _G.ThroughInteract then return end
+if v:IsA("ProximityPrompt") then
+if _G.InstanceInteract then
+v.HoldDuration = 0
+end
+if _G.ReachInteract then
+v.MaxActivationDistance = 15
+end
+if _G.ThroughInteract then
+v.RequiresLineOfSight = false
+end
+end
+end)
+Tabs.Main:Toggle({
+    Title = "Tương Tác Nhanh Chóng",
+    Value = false,
+    Callback = function(v) 
+_G.InstanceInteract = v
+if v then
+for _,v in pairs(workspace.CurrentRooms:GetDescendants()) do
+if v:IsA("ProximityPrompt") then
+v.HoldDuration = 0
+end
+end
+else
+print()
+end
+end})
+Tabs.Main:Toggle({
+    Title = "Tương Tác Xa",
+    Value = false,
+    Callback = function(v) 
+_G.ReachInteract = v
+if v then
+for _,v in pairs(workspace.CurrentRooms:GetDescendants()) do
+if v:IsA("ProximityPrompt") then
+v.MaxActivationDistance = 15
+end
+end
+else
+for _,v in pairs(workspace.CurrentRooms:GetDescendants()) do
+if v:IsA("ProximityPrompt") then
+v.MaxActivationDistance = 7
+end
+end
+end
+end})
+Tabs.Main:Toggle({
+    Title = "Tương Tác Xuyên",
+    Value = false,
+    Callback = function(v) 
+_G.ThroughInteract = v
+if v then
+for _,v in pairs(workspace.CurrentRooms:GetDescendants()) do
+if v:IsA("ProximityPrompt") then
+v.RequiresLineOfSight = false
+end
+end
+else
+for _,v in pairs(workspace.CurrentRooms:GetDescendants()) do
+if v:IsA("ProximityPrompt") then
+v.RequiresLineOfSight = true
+end
+end
+end
+end})
+Tabs.Main:Section({Title = "Thế Giới", Icon = "layout-grid"})
+game.Players.LocalPlayer.Character.Humanoid:GetPropertyChangedSignal("MoveDirection"):Connect(function()
+if _G.ClosetsExitFix and game.Players.LocalPlayer.Character:GetAttribute("Hiding")==true then 
+RemotesFolder.CamLock:FireServer()
+end 
+end)
+Tabs.Main:Toggle({
+    Title = "Sửa Lỗi Khi Ra Tủ",
+    Value = false,
+    Callback = function(v) 
+_G.ClosetsExitFix = v
+end})
+Tabs.Main:Divider()
+Tabs.Main:Slider({
+    Title = "Độ Mờ",
+    Value = { Min = 0.25, Max = 1, Default = 0.75 },
+    Callback = function(v)
+    _G.BlurTransparency = v
+end})
+Tabs.Main:Toggle({
+    Title = "Làm Mờ Cầu Giả",
+    Value = false,
+    Callback = function(v) 
+if v then
+for _,v in pairs(workspace:GetDescendants()) do
+if v.Name == "Bridge" and not v.CanCollide == true and v then
+v.Transparency = _G.BlurTransparency or 0.75
+end
+end
+BlurFakeBridge = workspace.CurrentRooms.ChildAdded:Connect(function(v)
+for _,v in pairs(workspace:GetDescendants()) do
+if v.Name == "Bridge" and not v.CanCollide == true and v then
+v.Transparency = _G.BlurTransparency or 0.75
+end
+end
+end)
+else
+BlurFakeBridge:Disconnect()
+for _,v in pairs(workspace:GetDescendants()) do
+if v.Name == "Bridge" and not v.CanCollide == true and v then
+v.Transparency = 0
+end
+end
+end
+end})
+Tabs.Main:Divider()
+Tabs.Main:Toggle({
+    Title = "Hiện Khối Dẫn Đường",
+    Value = false,
+    Callback = function(v) 
+if v then
+for _,v in ipairs(workspace.CurrentRooms:GetDescendants()) do
+if v.Parent.Name == "PathfindNodes" and v then
+local Part = Instance.new("Part",workspace)
+Part.Size = Vector3.new(1.5,1.5,1.5)
+Part.CFrame = v.CFrame
+Part.CanCollide = false
+Part.Shape = "Ball"
+Part.Anchored = true
+Part.Material = _G.MaterialList or "Neon"
+end
+end
+ShowPathfindNodes = workspace.CurrentRooms.DescendantAdded:Connect(function(v)
+if v.Parent.Name == "PathfindNodes" and v then
+local Part = Instance.new("Part",workspace)
+Part.Size = Vector3.new(1.5,1.5,1.5)
+Part.Name = "_PathfindNodes"
+Part.CFrame = v.CFrame
+Part.CanCollide = false
+Part.Shape = "Ball"
+Part.Anchored = true
+Part.Material = _G.MaterialList or "Neon"
+end
+end)
+else
+ShowPathfindNodes:Disconnect()
+for _,v in ipairs(workspace:GetDescendants()) do
+if v.Name == "_PathfindNodes" then
+v:Destroy()
+end
+end
+end
+end})
