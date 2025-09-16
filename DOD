@@ -1,0 +1,123 @@
+local Players = game:GetService('Players')
+local _wait = task.wait
+local inf = 9e999999999999999999999
+
+if Players.LocalPlayer and Players.LocalPlayer.Character then
+warn('Checking Character')
+_wait(3)
+warn('Complete')
+_wait(1)
+print('Script Loaded!')
+end
+
+for _,v in ipairs(workspace:GetDescendants()) do
+if v:IsA("ProximityPrompt") and v then
+v.HoldDuration = 0
+end
+end
+workspace.DescendantAdded:Connect(function(v)
+if v:IsA("ProximityPrompt") and v then
+v.HoldDuration = 0
+end
+end)
+
+game:GetService("RunService").Stepped:Connect(function()
+if workspace.GameAssets.Teams.Survivor:FindFirstChild(game.Players.LocalPlayer.Name) then
+workspace.GameAssets.Teams.Survivor:FindFirstChild(game.Players.LocalPlayer.Name):SetAttribute("MaxStamina", inf)
+workspace.GameAssets.Teams.Survivor:FindFirstChild(game.Players.LocalPlayer.Name):SetAttribute("WalkSpeed", 15)
+workspace.GameAssets.Teams.Survivor:FindFirstChild(game.Players.LocalPlayer.Name):SetAttribute("SprintSpeed", 33)
+end
+if workspace.GameAssets.Teams.Killer:FindFirstChild(game.Players.LocalPlayer.Name) then
+workspace.GameAssets.Teams.Killer:FindFirstChild(game.Players.LocalPlayer.Name):SetAttribute("MaxStamina", inf)
+workspace.GameAssets.Teams.Killer:FindFirstChild(game.Players.LocalPlayer.Name):SetAttribute("WalkSpeed", 15)
+workspace.GameAssets.Teams.Killer:FindFirstChild(game.Players.LocalPlayer.Name):SetAttribute("SprintSpeed", 33)
+end
+end)
+--// Create Highlight \\
+local function Highlight(target, color, name)
+task.wait(0.25)
+local Highlight = Instance.new('Highlight', target)
+--// Highlight \\
+Highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+Highlight.FillColor = color
+Highlight.OutlineColor = color
+Highlight.FillTransparency = 1
+Highlight.OutlineTransparency =  0.8
+Highlight.Name = name
+end
+--// Create Text \\
+local function KillerESP()
+for _,v in ipairs(workspace.GameAssets.Teams.Killer:GetChildren()) do
+if v:IsA("Model") and v and v.Parent.Name == "Killer" then
+Highlight(v, Color3.new(1), "KillerESP")
+local Billboard = Instance.new("BillboardGui", v)
+local TextLabel = Instance.new("TextLabel", Billboard)
+local UIStroke = Instance.new("UIStroke", TextLabel)
+--// Billboard \\
+Billboard.AlwaysOnTop = true
+Billboard.Size = UDim2.new(0,400,0,100)
+Billboard.Name = "KillerESP"
+Billboard.Active = true
+--// TextLabel \\
+TextLabel.AnchorPoint = Vector2.new(0.5,0.5)
+TextLabel.BackgroundTransparency = 1
+TextLabel.BackgroundColor3 = Color3.new(0,0,0)
+TextLabel.TextColor3 = Color3.new(1)
+TextLabel.Font = "Roboto"
+TextLabel.TextSize = 14
+TextLabel.TextTransparency = 0
+TextLabel.Visible = true
+TextLabel.Text = v.Name .. "\nHP:" .. v.Humanoid.Health .. "/" .. v.Humanoid.MaxHealth
+TextLabel.Size = UDim2.new(1,0,0,0)
+TextLabel.Position = UDim2.new(0.5,0,0.7,-25)
+--// UIStroke \\
+UIStroke.Thickness = 1
+UIStroke.Color = Color3.new()
+UIStroke.Transparency = 0
+game:GetService("RunService").Stepped:Connect(function()
+TextLabel.Text = v.Name .. "\nHP:" .. v.Humanoid.Health .. "/" .. v.Humanoid.MaxHealth
+end)
+end
+end
+end
+--// Create Text \\
+local function SurvivorESP()
+for _,v in ipairs(workspace.GameAssets.Teams.Survivor:GetChildren()) do
+if v:IsA("Model") and v and v.Parent.Name == "Survivor" then
+Highlight(v, Color3.new(0,1), "SurvivorESP")
+local Billboard = Instance.new("BillboardGui", v)
+local TextLabel = Instance.new("TextLabel", Billboard)
+local UIStroke = Instance.new("UIStroke", TextLabel)
+--// Billboard \\
+Billboard.AlwaysOnTop = true
+Billboard.Size = UDim2.new(0,400,0,100)
+Billboard.Name = "SurvivorESP"
+Billboard.Active = true
+--// TextLabel \\
+TextLabel.AnchorPoint = Vector2.new(0.5,0.5)
+TextLabel.BackgroundTransparency = 1
+TextLabel.BackgroundColor3 = Color3.new(0,0,0)
+TextLabel.TextColor3 = Color3.new(0,1)
+TextLabel.Font = "Roboto"
+TextLabel.TextSize = 14
+TextLabel.TextTransparency = 0
+TextLabel.Visible = true
+TextLabel.Text = v.Name .. "\nHP:" .. v.Humanoid.Health .. "/" .. v.Humanoid.MaxHealth
+TextLabel.Size = UDim2.new(1,0,0,0)
+TextLabel.Position = UDim2.new(0.5,0,0.7,-25)
+--// UIStroke \\
+UIStroke.Thickness = 1
+UIStroke.Color = Color3.new()
+UIStroke.Transparency = 0
+game:GetService("RunService").Stepped:Connect(function()
+TextLabel.Text = v.Name .. "\nHP:" .. v.Humanoid.Health .. "/" .. v.Humanoid.MaxHealth
+end)
+end
+end
+end
+KillerESP()
+SurvivorESP()
+workspace.GameAssets.Teams.Survivor.DescendantAdded:Connect(function(v)
+KillerESP()
+SurvivorESP()
+end)
