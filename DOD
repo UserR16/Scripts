@@ -46,7 +46,6 @@ Highlight.OutlineTransparency =  0
 Highlight.Name = name
 end
 --// Create Text \\
-local function KillerESP()
 for _,v in ipairs(workspace.GameAssets.Teams.Killer:GetChildren()) do
 if v:IsA("Model") and v and v.Parent.Name == "Killer" then
 Highlight(v, Color3.new(1), "KillerESP")
@@ -79,9 +78,7 @@ TextLabel.Text = v.Name .. "\nHP:" .. v.Humanoid.Health .. "/" .. v.Humanoid.Max
 end)
 end
 end
-end
 --// Create Text \\
-local function SurvivorESP()
 for _,v in ipairs(workspace.GameAssets.Teams.Survivor:GetChildren()) do
 if v:IsA("Model") and v and v.Parent.Name == "Survivor" then
 Highlight(v, Color3.new(0,1), "SurvivorESP")
@@ -98,7 +95,7 @@ TextLabel.AnchorPoint = Vector2.new(0.5,0.5)
 TextLabel.BackgroundTransparency = 1
 TextLabel.BackgroundColor3 = Color3.new(0,0,0)
 TextLabel.TextColor3 = Color3.new(0,1)
-TextLabel.Font = "Roboto"
+TextLabel.Font = "SourceSansBold"
 TextLabel.TextSize = 14
 TextLabel.TextTransparency = 0
 TextLabel.Visible = true
@@ -114,8 +111,68 @@ TextLabel.Text = v.Name .. "\nHP:" .. v.Humanoid.Health .. "/" .. v.Humanoid.Max
 end)
 end
 end
+workspace.GameAssets.Teams.Killer.DescendantAdded:Connect(function(v)
+--// Create Text \\
+if v:IsA("Model") and v and v.Parent.Name == "Killer" then
+Highlight(v, Color3.new(1), "KillerESP")
+local Billboard = Instance.new("BillboardGui", v)
+local TextLabel = Instance.new("TextLabel", Billboard)
+local UIStroke = Instance.new("UIStroke", TextLabel)
+--// Billboard \\
+Billboard.AlwaysOnTop = true
+Billboard.Size = UDim2.new(0,400,0,100)
+Billboard.Name = "KillerESP"
+Billboard.Active = true
+--// TextLabel \\
+TextLabel.AnchorPoint = Vector2.new(0.5,0.5)
+TextLabel.BackgroundTransparency = 1
+TextLabel.BackgroundColor3 = Color3.new(0,0,0)
+TextLabel.TextColor3 = Color3.new(1)
+TextLabel.Font = "SourceSansBold"
+TextLabel.TextSize = 14
+TextLabel.TextTransparency = 0
+TextLabel.Visible = true
+TextLabel.Text = v.Name .. "\nHP:" .. v.Humanoid.Health .. "/" .. v.Humanoid.MaxHealth
+TextLabel.Size = UDim2.new(1,0,0,0)
+TextLabel.Position = UDim2.new(0.5,0,0.7,-25)
+--// UIStroke \\
+UIStroke.Thickness = 1
+UIStroke.Color = Color3.new()
+UIStroke.Transparency = 0
+game:GetService("RunService").Stepped:Connect(function()
+TextLabel.Text = v.Name .. "\nHP:" .. v.Humanoid.Health .. "/" .. v.Humanoid.MaxHealth
+end)
 end
-game:GetService("RunService").RenderStepped:Connect(function()
-KillerESP()
-SurvivorESP()
+end)
+workspace.GameAssets.Teams.Survivor.DescendantAdded:Connect(function(v)
+if v:IsA("Model") and v and v.Parent.Name == "Survivor" then
+Highlight(v, Color3.new(0,1), "SurvivorESP")
+local Billboard = Instance.new("BillboardGui", v)
+local TextLabel = Instance.new("TextLabel", Billboard)
+local UIStroke = Instance.new("UIStroke", TextLabel)
+--// Billboard \\
+Billboard.AlwaysOnTop = true
+Billboard.Size = UDim2.new(0,400,0,100)
+Billboard.Name = "SurvivorESP"
+Billboard.Active = true
+--// TextLabel \\
+TextLabel.AnchorPoint = Vector2.new(0.5,0.5)
+TextLabel.BackgroundTransparency = 1
+TextLabel.BackgroundColor3 = Color3.new(0,0,0)
+TextLabel.TextColor3 = Color3.new(0,1)
+TextLabel.Font = "SourceSansBold"
+TextLabel.TextSize = 14
+TextLabel.TextTransparency = 0
+TextLabel.Visible = true
+TextLabel.Text = v.Name .. "\nHP:" .. v.Humanoid.Health .. "/" .. v.Humanoid.MaxHealth
+TextLabel.Size = UDim2.new(1,0,0,0)
+TextLabel.Position = UDim2.new(0.5,0,0.7,-25)
+--// UIStroke \\
+UIStroke.Thickness = 1
+UIStroke.Color = Color3.new()
+UIStroke.Transparency = 0
+game:GetService("RunService").Stepped:Connect(function()
+TextLabel.Text = v.Name .. "\nHP:" .. v.Humanoid.Health .. "/" .. v.Humanoid.MaxHealth
+end)
+end
 end)
