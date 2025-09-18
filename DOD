@@ -41,8 +41,8 @@ local Highlight = Instance.new('Highlight', target)
 Highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
 Highlight.FillColor = color
 Highlight.OutlineColor = color
-Highlight.FillTransparency = 1
-Highlight.OutlineTransparency =  0.8
+Highlight.FillTransparency = 0.8
+Highlight.OutlineTransparency =  0
 Highlight.Name = name
 end
 --// Create Text \\
@@ -63,7 +63,7 @@ TextLabel.AnchorPoint = Vector2.new(0.5,0.5)
 TextLabel.BackgroundTransparency = 1
 TextLabel.BackgroundColor3 = Color3.new(0,0,0)
 TextLabel.TextColor3 = Color3.new(1)
-TextLabel.Font = "Roboto"
+TextLabel.Font = "SourceSansBold"
 TextLabel.TextSize = 14
 TextLabel.TextTransparency = 0
 TextLabel.Visible = true
@@ -115,9 +115,7 @@ end)
 end
 end
 end
-KillerESP()
-SurvivorESP()
-workspace.GameAssets.Teams.Survivor.DescendantAdded:Connect(function(v)
+game:GetService("RunService").RenderStepped:Connect(function()
 KillerESP()
 SurvivorESP()
 end)
