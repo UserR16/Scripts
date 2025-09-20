@@ -51,6 +51,29 @@ StaminaScript.StaminaLoss = 0.1
 StaminaScript.SprintSpeed = 28.5
 end)
 --// ESP \\
+local function Text(target, title, color, fontsize, name)
+local Billboard = Instance.new("BillboardGui", target)
+local TextLabel = Instance.new("TextLabel", Billboard)
+local UIStroke = Instance.new("UIStroke", TextLabel)
+Billboard.AlwaysOnTop = true
+Billboard.Size = UDim2.new(0,400,0,100)
+Billboard.Name = name
+Billboard.Active = true
+TextLabel.AnchorPoint = Vector2.new(0.5,0.5)
+TextLabel.BackgroundTransparency = 1
+TextLabel.BackgroundColor3 = Color3.new(0,0,0)
+TextLabel.TextColor3 = color
+TextLabel.Font = "SourceSans"
+TextLabel.TextSize = fontsize
+TextLabel.TextTransparency = 0
+TextLabel.Visible = true
+TextLabel.Text = title
+TextLabel.Size = UDim2.new(1,0,0,0)
+TextLabel.Position = UDim2.new(0.5,0,0.7,-25)
+UIStroke.Thickness = 0.5
+UIStroke.Color = Color3.new()
+UIStroke.Transparency = 0
+end
 local function Highlight(target, color, name)
 task.wait(0.25)
 local Highlight = Instance.new('Highlight', target)
@@ -61,3 +84,75 @@ Highlight.FillTransparency = 0.8
 Highlight.OutlineTransparency =  0
 Highlight.Name = name
 end
+
+for _, v in ipairs(workspace:GetDescendants()) do
+if v:IsA("Model") and v.Name == "SubspaceTripmine" and not v:FindFirstChild("SubspaceTripmine_ESP") then
+Text(v, "Subspace Tripmine", Color3.new(1,0,1), 14, "SubspaceTripmine_ESP")
+Highlight(v, Color3.new(1,0,1), "SubspaceTripmine_ESP")
+end
+end
+SubspaceTripmineESP = workspace.Map.Ingame.DescendantAdded:Connect(function(v)
+wait(1)
+if v:IsA("Model") and v.Name == "SubspaceTripmine" and not v:FindFirstChild("SubspaceTripmine_ESP") then
+Text(v, "Subspace Tripmine", Color3.new(1,0,1), 14, "SubspaceTripmine_ESP")
+Highlight(v, Color3.new(1,0,1), "SubspaceTripmine_ESP")
+end
+end)
+for _, v in ipairs(workspace:GetDescendants()) do
+if v:IsA("Model") and v.Parent.Name == "Map" and v.Name == "Generator" and not v:FindFirstChild("Generator_ESP") then
+Text(v, v.Name, Color3.new(0,0,1), 14, "Generator_ESP")
+Highlight(v, Color3.new(0,0,1), "Generator_ESP")
+end
+end
+GeneratorESP = workspace.Map.Ingame.DescendantAdded:Connect(function(v)
+if v:IsA("Model") and v.Parent.Name == "Map" and v.Name == "Generator" and not v:FindFirstChild("Generator_ESP") then
+Text(v, v.Name, Color3.new(0,0,1), 14, "Generator_ESP")
+Highlight(v, Color3.new(0,0,1), "Generator_ESP")
+end
+end)
+for _, v in ipairs(workspace:GetDescendants()) do
+if v:IsA("Model") and v.Name == "BloxyCola" and not v:FindFirstChild("Items_ESP") then
+Text(v, v.Name, Color3.new(1,1), 14, "Items_ESP")
+Highlight(v, Color3.new(1,1), "Items_ESP")
+elseif v:IsA("Model") and v.Name == "Medkit" and not v:FindFirstChild("Items_ESP") then
+Text(v, v.Name, Color3.new(1), 14, "Items_ESP")
+Highlight(v, Color3.new(1), "Items_ESP")
+end
+end
+ItemsESP = workspace.Map.Ingame.DescendantAdded:Connect(function(v)
+if v:IsA("Model") and v then
+if v.Name == "BloxyCola" and not v:FindFirstChild("Items_ESP") then
+Text(v, v.Name, Color3.new(1,1), 14, "Items_ESP")
+Highlight(v, Color3.new(1,1), "Items_ESP")
+elseif v.Name == "Medkit" and not v:FindFirstChild("Items_ESP") then
+Text(v, v.Name, Color3.new(1), 14, "Items_ESP")
+Highlight(v, Color3.new(1), "Items_ESP")
+end
+end
+end)
+for _, v in ipairs(workspace.Players.Survivors:GetChildren()) do
+if v:IsA("Model") and v.Parent.Name == "Survivors" then
+Text(v.HumanoidRootPart, v.Name, Color3.new(0,1), 14, "Survivor_ESP")
+Highlight(v, Color3.new(0,1), "Survivor_ESP")
+end
+end
+SurvivalESP = workspace.Players.Survivors.ChildAdded:Connect(function(v)
+wait(2)
+if v:IsA("Model") and v.Parent.Name == "Survivors" then
+Text(v.HumanoidRootPart, v.Name, Color3.new(0,1), 14, "Survivor_ESP")
+Highlight(v, Color3.new(0,1), "Survivor_ESP")
+end
+end)
+for _, v in pairs(workspace.Players.Killers:GetChildren()) do
+if v:IsA("Model") and v.Parent.Name == "Killers" then
+Text(v.HumanoidRootPart, v.Name .. "\n" .. v:GetAttribute("SkinNameDisplay"), Color3.new(1), 14, "Killer_ESP")
+Highlight(v, Color3.new(1), "Killer_ESP")
+end
+end
+KillerESP = workspace.Players.Killers.ChildAdded:Connect(function(v)
+wait(2)
+if v:IsA("Model") and v.Parent.Name == "Killers" then
+Text(v.HumanoidRootPart, v.Name .. "\n" .. v:GetAttribute("SkinNameDisplay"), Color3.new(1), 14, "Killer_ESP")
+Highlight(v, Color3.new(1), "Killer_ESP")
+end
+end)
