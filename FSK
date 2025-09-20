@@ -1,0 +1,63 @@
+local Players = game:GetService("Players")
+
+--// Auto Generator \\
+task.spawn(function()
+while true do
+if Players.LocalPlayer:FindFirstChild("Character"):FindFirstChild("CollisionHitbox") then
+if Players.LocalPlayer:FindFirstChild("Character"):FindFirstChildOfClass("Humanoid").Health > 0 then
+if Players.LocalPlayer.PlayerGui:FindFirstChild("PuzzleUI") then
+for _,v in ipairs(workspace.Map.Ingame.Map:GetChildren()) do
+if v.Name == "Generator" then
+v.Remotes.RE:FireServer()
+end
+end
+end
+end
+end
+task.wait(3.75)
+end
+end)
+--// Miscellaneous \\
+if game:GetService("ReplicatedStorage").Modules.StatusEffects:FindFirstChild("Blindness") then
+game:GetService("ReplicatedStorage").Modules.StatusEffects:FindFirstChild("Blindness"):Destroy()
+end
+if game:GetService("ReplicatedStorage").Modules.StatusEffects:FindFirstChild("Slowness") then
+game:GetService("ReplicatedStorage").Modules.StatusEffects:FindFirstChild("Slowness"):Destroy()
+end
+game:GetService("RunService").Stepped:Connect(function()
+workspace.Camera.FieldOfView = 120
+game.Lighting.OutdoorAmbient = Color3.fromRGB(255,255,255)
+game.Lighting.Brightness = 1.5
+game.Lighting.GlobalShadows = false
+if not game.Lighting:GetAttribute("FogStart") then game.Lighting:SetAttribute("FogStart", game.Lighting.FogStart) end
+if not game.Lighting:GetAttribute("FogEnd") then game.Lighting:SetAttribute("FogEnd", game.Lighting.FogEnd) end
+game.Lighting.FogStart = 0
+game.Lighting.FogEnd = math.huge
+local fog = game.Lighting:FindFirstChildOfClass("Atmosphere")
+if fog then
+if not fog:GetAttribute("Density") then fog:SetAttribute("Density", fog.Density) end
+fog.Density = 0
+end
+if Players.LocalPlayer.PlayerGui:FindFirstChild("PuzzleUI") then
+Players.LocalPlayer.PlayerGui:FindFirstChild("PuzzleUI").Enabled = false
+end
+if Players.LocalPlayer.PlayerGui:FindFirstChild("TemporaryUI"):FindFirstChild("PlayerInfo"):FindFirstChild("CurrentSurvivors") then
+Players.LocalPlayer.PlayerGui:FindFirstChild("TemporaryUI"):FindFirstChild("PlayerInfo"):FindFirstChild("CurrentSurvivors").Visible = true
+end
+local StaminaScript = require(game:GetService("ReplicatedStorage").Systems.Character.Game.Sprinting)
+StaminaScript.MaxStamina = 10000
+StaminaScript.StaminaGain = 10000
+StaminaScript.StaminaLoss = 0.1
+StaminaScript.SprintSpeed = 28.5
+end)
+--// ESP \\
+local function Highlight(target, color, name)
+task.wait(0.25)
+local Highlight = Instance.new('Highlight', target)
+Highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+Highlight.FillColor = color
+Highlight.OutlineColor = color
+Highlight.FillTransparency = 0.8
+Highlight.OutlineTransparency =  0
+Highlight.Name = name
+end
