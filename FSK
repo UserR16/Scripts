@@ -3,14 +3,10 @@ local Players = game:GetService("Players")
 --// Auto Generator \\
 task.spawn(function()
 while true do
-if Players.LocalPlayer:FindFirstChild("Character"):FindFirstChild("CollisionHitbox") then
-if Players.LocalPlayer:FindFirstChild("Character"):FindFirstChildOfClass("Humanoid").Health > 0 then
 if Players.LocalPlayer.PlayerGui:FindFirstChild("PuzzleUI") then
 for _,v in ipairs(workspace.Map.Ingame.Map:GetChildren()) do
 if v.Name == "Generator" then
 v.Remotes.RE:FireServer()
-end
-end
 end
 end
 end
@@ -24,8 +20,8 @@ end
 if game:GetService("ReplicatedStorage").Modules.StatusEffects:FindFirstChild("Slowness") then
 game:GetService("ReplicatedStorage").Modules.StatusEffects:FindFirstChild("Slowness"):Destroy()
 end
-game:GetService("RunService").Stepped:Connect(function()
-workspace.Camera.FieldOfView = 120
+game:GetService("RunService").RenderStepped:Connect(function()
+workspace.CurrentCamera.FieldOfView = 120
 game.Lighting.OutdoorAmbient = Color3.fromRGB(255,255,255)
 game.Lighting.Brightness = 1.5
 game.Lighting.GlobalShadows = false
