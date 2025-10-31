@@ -25,6 +25,15 @@ end
 if game:GetService("ReplicatedStorage").Modules.StatusEffects:FindFirstChild("Slowness") then
 game:GetService("ReplicatedStorage").Modules.StatusEffects:FindFirstChild("Slowness"):Destroy()
 end
+if game:GetService("ReplicatedStorage").Modules.StatusEffects:FindFirstChild("Weakness") then
+game:GetService("ReplicatedStorage").Modules.StatusEffects:FindFirstChild("Weakness"):Destroy()
+end
+if game:GetService("ReplicatedStorage").Modules.StatusEffects.KillerExclusive:FindFirstChild("Hallucination") then
+game:GetService("ReplicatedStorage").Modules.StatusEffects.KillerExclusive:FindFirstChild("Hallucination"):Destroy()
+end
+if game:GetService("ReplicatedStorage").Modules.StatusEffects.SurvivorExclusive:FindFirstChild("Subspaced") then
+game:GetService("ReplicatedStorage").Modules.StatusEffects.SurvivorExclusive:FindFirstChild("Subspaced"):Destroy()
+end
 game:GetService("RunService").RenderStepped:Connect(function()
 workspace.CurrentCamera.FieldOfView = 120
 game.Lighting.OutdoorAmbient = Color3.fromRGB(255,255,255)
