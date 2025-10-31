@@ -1,19 +1,24 @@
 local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Character = LocalPlayer:WaitForChild("Character")
+local GetPlayers = Players:GetChildren()
+local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local _spawn = task.spawn
+local _pcall = task.pcall
 
---// Auto Generator \\
-task.spawn(function()
+_spawn(function()
 while true do
-if Players.LocalPlayer.PlayerGui:FindFirstChild("PuzzleUI") then
-for _,v in ipairs(workspace.Map.Ingame.Map:GetChildren()) do
-if v.Name == "Generator" then
+if LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("PuzzleUI") then
+for i, v in ipairs(workspace.Map.Ingame.Map:GetChildren()) do
+if i.Name == "Generator" then
 v.Remotes.RE:FireServer()
 end
 end
 end
-task.wait(3.75)
+wait(3.75)
 end
 end)
---// Miscellaneous \\
 if game:GetService("ReplicatedStorage").Modules.StatusEffects:FindFirstChild("Blindness") then
 game:GetService("ReplicatedStorage").Modules.StatusEffects:FindFirstChild("Blindness"):Destroy()
 end
@@ -34,11 +39,11 @@ if fog then
 if not fog:GetAttribute("Density") then fog:SetAttribute("Density", fog.Density) end
 fog.Density = 0
 end
-if Players.LocalPlayer.PlayerGui:FindFirstChild("PuzzleUI") then
-Players.LocalPlayer.PlayerGui:FindFirstChild("PuzzleUI").Enabled = false
+if LocalPlayer.PlayerGui:FindFirstChild("PuzzleUI") then
+LocalPlayer.PlayerGui:FindFirstChild("PuzzleUI").Enabled = false
 end
-if Players.LocalPlayer.PlayerGui:FindFirstChild("TemporaryUI"):FindFirstChild("PlayerInfo"):FindFirstChild("CurrentSurvivors") then
-Players.LocalPlayer.PlayerGui:FindFirstChild("TemporaryUI"):FindFirstChild("PlayerInfo"):FindFirstChild("CurrentSurvivors").Visible = true
+if LocalPlayer.PlayerGui:FindFirstChild("TemporaryUI"):FindFirstChild("PlayerInfo"):FindFirstChild("CurrentSurvivors") then
+LocalPlayer.PlayerGui:FindFirstChild("TemporaryUI"):FindFirstChild("PlayerInfo"):FindFirstChild("CurrentSurvivors").Visible = true
 end
 local StaminaScript = require(game:GetService("ReplicatedStorage").Systems.Character.Game.Sprinting)
 StaminaScript.MaxStamina = 10000
@@ -46,7 +51,6 @@ StaminaScript.StaminaGain = 10000
 StaminaScript.StaminaLoss = 0.1
 StaminaScript.SprintSpeed = 28.5
 end)
---// ESP \\
 local function Text(target, title, color, fontsize, name)
 local Billboard = Instance.new("BillboardGui", target)
 local TextLabel = Instance.new("TextLabel", Billboard)
@@ -59,7 +63,7 @@ TextLabel.AnchorPoint = Vector2.new(0.5,0.5)
 TextLabel.BackgroundTransparency = 1
 TextLabel.BackgroundColor3 = Color3.new(0,0,0)
 TextLabel.TextColor3 = color
-TextLabel.Font = "SourceSans"
+TextLabel.Font = "SourceSansBold"
 TextLabel.TextSize = fontsize
 TextLabel.TextTransparency = 0
 TextLabel.Visible = true
@@ -71,7 +75,6 @@ UIStroke.Color = Color3.new()
 UIStroke.Transparency = 0
 end
 local function Highlight(target, color, name)
-task.wait(0.25)
 local Highlight = Instance.new('Highlight', target)
 Highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
 Highlight.FillColor = color
@@ -80,7 +83,6 @@ Highlight.FillTransparency = 0.8
 Highlight.OutlineTransparency =  0
 Highlight.Name = name
 end
-
 for _, v in ipairs(workspace:GetDescendants()) do
 if v:IsA("Model") and v.Name == "SubspaceTripmine" and not v:FindFirstChild("SubspaceTripmine_ESP") then
 Text(v, "Subspace Tripmine", Color3.new(1,0,1), 14, "SubspaceTripmine_ESP")
@@ -88,7 +90,6 @@ Highlight(v, Color3.new(1,0,1), "SubspaceTripmine_ESP")
 end
 end
 SubspaceTripmineESP = workspace.Map.Ingame.DescendantAdded:Connect(function(v)
-wait(1)
 if v:IsA("Model") and v.Name == "SubspaceTripmine" and not v:FindFirstChild("SubspaceTripmine_ESP") then
 Text(v, "Subspace Tripmine", Color3.new(1,0,1), 14, "SubspaceTripmine_ESP")
 Highlight(v, Color3.new(1,0,1), "SubspaceTripmine_ESP")
@@ -100,7 +101,7 @@ Text(v, v.Name, Color3.new(0,0,1), 14, "Generator_ESP")
 Highlight(v, Color3.new(0,0,1), "Generator_ESP")
 end
 end
-GeneratorESP = workspace.Map.Ingame.DescendantAdded:Connect(function(v)
+GeneratorESP = workspace.Map.Ingame.Map.DescendantAdded:Connect(function(v)
 if v:IsA("Model") and v.Parent.Name == "Map" and v.Name == "Generator" and not v:FindFirstChild("Generator_ESP") then
 Text(v, v.Name, Color3.new(0,0,1), 14, "Generator_ESP")
 Highlight(v, Color3.new(0,0,1), "Generator_ESP")
@@ -152,3 +153,14 @@ Text(v.HumanoidRootPart, v.Name .. "\n" .. v:GetAttribute("SkinNameDisplay"), Co
 Highlight(v, Color3.new(1), "Killer_ESP")
 end
 end)
+
+
+
+
+
+
+
+
+
+
+
